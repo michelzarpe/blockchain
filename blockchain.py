@@ -30,3 +30,27 @@ class Blockchain:
     def getPreviousBlock(self):
         return self.chain[-1]
     
+    #processo de mineração, achar novo nonce
+    def proofOfWork(self,previous_proof):
+        newProof = 1
+        checkProof = False #check se a prova é correta
+        while checkProof is False:
+            hashOperation = hashlib.sha256(str(newProof**2-previous_proof**2).encode()).hexdigest()
+            if hashOperation[:4] == '0000':
+                checkProof = True
+            else:
+                newProof+=1
+        return newProof
+    
+    #gera e retorna o sha256
+    def hash(self,block):
+        encodedBlock = json.dumps(block, sort_keys=True).encode()
+        return hashlib.sha256(encodedBlock).hexdigest()
+    
+  
+
+
+
+
+            
+    
