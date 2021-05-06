@@ -68,7 +68,30 @@ class Blockchain:
 app = Flask(__name__)
 blockchian = Blockchain()
 
+@app.route('/mine_block',methods = ['GET'])
+def mine_block():
+    previousBlock = blockchian.getPreviousBlock()
+    previousProof = previousBlock['proof']
+    proof = blockchian.proofOfWork(previousProof)
+    previousHash = blockchian.hash(previousBlock)
+    block = blockchian.createBlock(proof, previousHash)
+    response = {'message':'Parabéns por minerar um bloco',
+                'index': block['index'],
+                'timestamp':block['timestamp'],
+                'proof':block['proof'],
+                'previous_hash':block['previous_hahs']}
+    return jsonify(response), 200
 
+
+@app.route('/get_chain',methods = ['GET'])
+def get_chain():
+    response = {'chain':blockchian.chain,
+                'lenght':len(blockchian.chain)}
+    return jsonify(response), 200
+      
+app.run(host = '0.0.0.0', port = 5000)
+
+    
 
 
 
