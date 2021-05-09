@@ -79,7 +79,7 @@ def mine_block():
                 'index': block['index'],
                 'timestamp':block['timestamp'],
                 'proof':block['proof'],
-                'previous_hash':block['previous_hahs']}
+                'previous_hash':block['previous_hash']}
     return jsonify(response), 200
 
 
@@ -88,6 +88,17 @@ def get_chain():
     response = {'chain':blockchian.chain,
                 'lenght':len(blockchian.chain)}
     return jsonify(response), 200
+
+@app.route('/is_valid',methods = ['GET'])
+def is_valid():
+    isValid = blockchian.isChainValid(blockchian.chain)
+    if isValid:
+        response = {'message':'blockchain is valid'}
+    else:
+        response = {'message':'blockchain is not valid'}
+        
+    return jsonify(response), 200
+
       
 app.run(host = '0.0.0.0', port = 5000)
 
